@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Track Approval Panel</title>
+  <style>
+    table { border-collapse: collapse; width: 90%; margin: auto; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
+    th { background: #f4f4f4; }
+    button { padding: 6px 10px; }
+  </style>
+</head>
+<body>
+  <h2 style="text-align: center;">Track Moderation</h2>
+  <table>
+    <tr>
+      <th>Title</th>
+      <th>Artist</th>
+      <th>Uploader</th>
+      <th>Approved</th>
+      <th>Actions</th>
+    </tr>
+    <% tracks.forEach(track => { %>
+      <tr>
+        <td><%= track.title %></td>
+        <td><%= track.artist %></td>
+        <td><%= track.uploader?.email || 'Unknown' %></td>
+        <td><%= track.approved ? '✅' : '❌' %></td>
+        <td>
+          <% if (!track.approved) { %>
+            <form method="POST" action="/admin/<%= track._id %>/approve" style="display:inline">
+              <button>Approve</button>
+            </form>
+          <% } %>
+          <form method="POST" action="/admin/<%= track._id %>/delete" style="display:inline">
+            <button>Delete</button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+  </table>
+</body>
+</html>
