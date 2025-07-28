@@ -24,7 +24,7 @@ router.get('/dashboard/music', async (req, res) => {
 
 
 
-// Approve a song by ID
+
 router.put('/dashboard/music/approve/:id', async (req, res) => {
   try {
     await Song.findByIdAndUpdate(req.params.id, { status: 'approved' });
@@ -34,7 +34,7 @@ router.put('/dashboard/music/approve/:id', async (req, res) => {
   }
 });
 
-// Delete a song by ID
+
 router.delete('/dashboard/music/delete/:id', async (req, res) => {
   try {
     await Song.findByIdAndDelete(req.params.id);
@@ -66,7 +66,6 @@ router.get('/songs/approved-songs', getApprovedSongs);
 // GET /api/user/tracks
 
 
-// Get user's uploaded tracks
 router.get('/tracks', ensureAuth, async (req, res) => {
   try {
     const tracks = await Track.find({ uploadedBy: req.user._id, status: 'approved' }).sort({ createdAt: -1 });

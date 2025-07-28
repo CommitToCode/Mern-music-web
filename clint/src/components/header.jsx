@@ -1,4 +1,4 @@
-// src/components/Header.js
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/authcontext';
@@ -45,7 +45,6 @@ export default function Header() {
   );
 }
 
-// Styles
 const headerWrapper = {
   background: '#121212',
   padding: '16px 32px',

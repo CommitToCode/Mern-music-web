@@ -51,7 +51,6 @@ router.get('/api/songs', async (req, res) => {
 
 
 
-// Get single song by ID for sharing
 router.get('/api/songs/:id', async (req, res) => {
   try {
     const song = await Song.findById(req.params.id).populate('uploadedBy');
@@ -77,15 +76,13 @@ router.get('/api/songs/:id', async (req, res) => {
 
 
 
-
-// Dashboard
 router.get('/', admin.getDashboard);
 
-// Song CRUD with file uploads
+
 router.get('/songs', admin.getAllSongs);
 router.get('/songs/add', admin.renderAddForm);
 
-// Add song (upload song + image)
+
 router.post(
   '/songs/add',
   upload.fields([
@@ -95,7 +92,6 @@ router.post(
   admin.addSong
 );
 
-// Edit song (with optional re-upload of files)
 router.get('/songs/edit/:id', admin.renderEditForm);
 router.post(
   '/songs/edit/:id',

@@ -83,7 +83,7 @@ export default function UserProfilePage() {
           )}
         </div>
 
-        {/* Downloads Section */}
+    
         <section style={downloadSectionStyle}>
           <h3 style={headerStyle}>📥 Downloaded Songs</h3>
           {loadingDownloads ? (
@@ -121,7 +121,7 @@ export default function UserProfilePage() {
           )}
         </section>
 
-        {/* Uploaded Songs Section */}
+        
         <section style={{ ...downloadSectionStyle, marginTop: '3rem' }}>
           {/* <h3 style={headerStyle}>🎤 Your Uploaded Songs</h3> */}
           {loadingUploads ? (

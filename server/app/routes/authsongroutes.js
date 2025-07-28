@@ -4,13 +4,13 @@ const User = require('../models/user');
 const { ensureAuth } = require('../middleware/authsong');
 const router = express.Router();
 
-// UI routes
+
 router.get('/register', (req, res) => res.render('register'));
 router.get('/login', (req, res) => res.render('login'));
 router.get('/subscribe', ensureAuth, (req, res) => res.render('subscribe'));
 router.post('/logout', (req, res) => req.session.destroy(() => res.redirect('/login')));
 
-// Register API
+
 router.post('/api/register', async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) return res.status(400).json({ error: 'Missing email or password' });
@@ -50,7 +50,7 @@ router.post('/api/login', async (req, res) => {
   res.json({ msg: 'loggedin', isSubscribed: u.isSubscribed, expires: u.subscriptionExpires });
 });
 
-// Subscribe API
+
 router.post('/api/subscribe', ensureAuth, async (req, res) => {
   const expires = new Date();
   expires.setDate(expires.getDate() + 7);

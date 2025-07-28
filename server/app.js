@@ -28,7 +28,7 @@ app.use(
 );
 
 
-// Middleware
+
 app.use(cors({
   origin: 'http://localhost:5173',
   credentials: true,
@@ -38,11 +38,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// View Engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Routes
 app.use('/admin',adminRoutes);
 app.use(authRoutes);
 app.use('/songs',songRoutes);

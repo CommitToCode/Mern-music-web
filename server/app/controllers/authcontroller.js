@@ -15,7 +15,7 @@ class AuthController {
     res.render('subscribe');
   }
 
-  // UI Register
+  
   async register(req, res) {
     const { name, email, password } = req.body;
     if (!name || !email || !password) return res.redirect('/register');
@@ -25,7 +25,7 @@ class AuthController {
     res.redirect('/login');
   }
 
-  // UI Login
+
   async login(req, res) {
     const user = await User.findOne({ email: req.body.email });
     const ok = user && await bcrypt.compare(req.body.password, user.passwordHash);
@@ -43,12 +43,12 @@ class AuthController {
     res.redirect('/');
   }
 
-  // Logout
+
   async logout(req, res) {
     req.session.destroy(() => res.redirect('/login'));
   }
 
-  // API Register
+  
   async apiRegister(req, res) {
     const { name, email, password } = req.body;
     if (!name || !email || !password) return res.status(400).json({ error: 'Missing fields' });
@@ -68,7 +68,7 @@ class AuthController {
     res.json({ msg: 'registered' });
   }
 
-  // API Login
+  
   async apiLogin(req, res) {
     const u = await User.findOne({ email: req.body.email });
     if (!u || !(await bcrypt.compare(req.body.password, u.passwordHash))) {
@@ -92,7 +92,7 @@ class AuthController {
     });
   }
 
-  // API Subscribe
+  
   async apiSubscribe(req, res) {
     const expires = new Date();
     expires.setDate(expires.getDate() + 7);
@@ -109,7 +109,7 @@ class AuthController {
     res.json({ success: true, expires });
   }
 
-  // Request OTP for password reset
+  
   async requestResetOTP(req, res) {
     const { email } = req.body;
     if (!email) return res.status(400).json({ error: 'Email required' });
@@ -129,7 +129,7 @@ class AuthController {
     res.json({ msg: 'OTP sent to email' });
   }
 
-  // Verify OTP and reset password
+
   async resetPasswordWithOTP(req, res) {
     const { email, otp, newPassword } = req.body;
     if (!email || !otp || !newPassword)

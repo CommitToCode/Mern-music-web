@@ -7,7 +7,7 @@ export default function SongCard({ song }) {
   const { addFavorite } = useFavorites();
   const { isLoggedIn } = useAuth();
 
-  if (!song) return null; // Prevents crash on undefined song
+  if (!song) return null; 
 
   return (
     <div style={cardStyle}>
