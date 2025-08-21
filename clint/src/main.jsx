@@ -4,9 +4,9 @@ import './index.css';
 import App from './App.jsx';
 
 // ✅ Set global BASE_URL once
-const BASE_URL = "https://mern-music-web.onrender.com"; // change only here
+const BASE_URL = "https://mern-music-web.onrender.com"; 
 
-// ✅ Override fetch globally (before rendering App)
+
 const originalFetch = window.fetch;
 window.fetch = (url, options) => {
   if (typeof url === "string" && url.startsWith("http://localhost:3005")) {

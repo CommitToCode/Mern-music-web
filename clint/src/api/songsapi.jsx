@@ -1,5 +1,5 @@
 export async function fetchSongs() {
-  const res = await fetch("https://mern-music-web.onrender.com/admin/api/songs", {
+  const res = await fetch("http://localhost:3005/admin/api/songs", {
     credentials: "include" 
   });
 
