@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const session = require('express-session');
+const MongoStore = require('connect-mongo'); // added
 const cors = require('cors');
 const path = require('path');
 const dbcon = require('./app/config/dbcon');
@@ -11,31 +12,34 @@ const User = require('./app/models/user');
 const musicRoutes = require('./app/routes/musicroutes');
 require('dotenv').config();
 
-
+// Connect to MongoDB
 dbcon();
+
+// Session setup using MongoDB store
 app.use(
   session({
     secret: 'myverysecurekey123@!',
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.mongodb_url }), // changed
     cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 7, 
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
       httpOnly: true,
-      sameSite: 'lax', 
-      secure: false    
+      sameSite: 'lax',
+      secure: false
     },
   })
 );
 
-
-
-app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://mern-music-fyhx4ilrz-committocodes-projects.vercel.app"
-  ],
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://mern-music-fyhx4ilrz-committocodes-projects.vercel.app"
+    ],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -45,15 +49,12 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-app.use('/admin',adminRoutes);
+app.use('/admin', adminRoutes);
 app.use(authRoutes);
-app.use('/songs',songRoutes);
-
-
-
+app.use('/songs', songRoutes);
 
 app.get('/api/me', async (req, res) => {
-    console.log('Session:', req.session);
+  console.log('Session:', req.session);
   if (!req.session?.user) {
     return res.status(401).json({ error: 'Not authenticated' });
   }
@@ -73,46 +74,17 @@ app.post('/api/logout', (req, res) => {
       console.error('Logout error:', err);
       return res.status(500).json({ error: 'Logout failed' });
     }
-    res.clearCookie('connect.sid'); 
+    res.clearCookie('connect.sid');
     res.json({ message: 'Logged out successfully' });
   });
 });
-
 
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).json({ error: 'Internal Server Error' });
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// GET /api/tracks
-
-
 app.use('/', musicRoutes);
-
-
-
-
-
-
 
 app.listen(3005, () => {
   console.log('✅ Server running at http://localhost:3005');

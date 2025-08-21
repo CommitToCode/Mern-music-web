@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App.jsx';
 
-// ✅ Set global BASE_URL once
+
 const BASE_URL = "https://mern-music-web.onrender.com"; 
 
 
