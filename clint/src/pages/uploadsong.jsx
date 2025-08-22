@@ -18,7 +18,7 @@ export default function Upload() {
   const getFileUrl = (filePath) => {
     if (!filePath) return '';
     const cleanedPath = filePath.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
-    return `http://localhost:3005/uploads/${cleanedPath}`;
+    return `https://mern-music-web.onrender.com/uploads/${cleanedPath}`;
   };
 
   const checkLoginStatus = async () => {
@@ -148,7 +148,7 @@ export default function Upload() {
       formData.append('image', image);
       formData.append('audio', audio);
 
-      const uploadRes = await fetch('http://localhost:3005/uploads', {
+      const uploadRes = await fetch('https://mern-music-web.onrender.com/uploads', {
         method: 'POST',
         body: formData,
         credentials: 'include',
