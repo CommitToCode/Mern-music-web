@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+const cors=require('cors')
 const path = require('path');
 const dbcon = require('./app/config/dbcon');
 const adminRoutes = require('./app/routes/admin');
@@ -13,6 +14,12 @@ require('dotenv').config();
 
 
 dbcon();
+
+
+app.use(cors({
+  origin: ['http://localhost:5173', 'https://mern-music-web.vercel.app'],
+  credentials: true
+}));
 
 
 const allowedOrigins = [
