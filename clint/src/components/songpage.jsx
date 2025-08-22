@@ -268,9 +268,6 @@ export default function SongsPage() {
                   src={`http://localhost:3005${song.imageUrl || '/images/default-cover.png'}`}
                   alt={song.title}
                   style={styles.img}
-                  onError={(e) => {
-                    e.target.src = 'http://localhost:3005/images/default-cover.png';
-                  }}
                 />
                 {song.fileUrl && isPlaying && (
                   <div style={styles.visualizer}>
@@ -281,8 +278,8 @@ export default function SongsPage() {
                 )}
               </div>
 
-              <h4 style={{ margin: '8px 0 4px', fontSize: 'clamp(14px, 4vw, 18px)' }}>{song.title}</h4>
-              <p style={{ color: '#aaa', marginBottom: 8, fontSize: 'clamp(12px, 3vw, 14px)' }}>{song.artist}</p>
+              <h4 style={{ margin: '8px 0 4px' }}>{song.title}</h4>
+              <p style={{ color: '#aaa', marginBottom: 8 }}>{song.artist}</p>
 
               {song.fileUrl && (
                 <>
@@ -294,14 +291,12 @@ export default function SongsPage() {
                       width: '100%',
                       outline: 'none',
                       filter: 'invert(1) brightness(1.2)',
-                      height: '40px',
                     }}
                     onPlay={() => setPlayingSongId(song._id)}
                     onPause={() => setPlayingSongId(null)}
                     onEnded={() => setPlayingSongId(null)}
                   >
                     <source src={`http://localhost:3005${song.fileUrl}`} type="audio/mpeg" />
-                    Your browser does not support the audio element.
                   </audio>
                   {isPlaying && (
                     <div style={styles.seekControls}>
@@ -365,13 +360,12 @@ export default function SongsPage() {
 
 const styles = {
   container: {
-    padding: '16px 12px',
+    padding: '24px 16px',
     background: 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)',
     minHeight: '100vh',
     color: '#f0f0f0',
     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
     position: 'relative',
-    boxSizing: 'border-box',
   },
 
   searchBarWrapper: {
@@ -379,23 +373,23 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
-    marginBottom: '20px',
+    marginBottom: '80px',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
   },
 
   searchInput: {
-    padding: '10px 12px',
+    padding: '8px 12px',
     borderRadius: '8px',
     border: '1px solid #444',
-    fontSize: '16px', // Larger font for mobile touch
+    fontSize: '14px',
     backgroundColor: '#111',
     color: '#eee',
+    minWidth: '220px',
     flex: '1',
-    minWidth: '0', // Allow shrinking on mobile
+    maxWidth: '400px',
     outline: 'none',
     marginRight: '8px',
-    boxSizing: 'border-box',
   },
 
   dropdownWrapper: {
@@ -432,9 +426,9 @@ const styles = {
     background: 'transparent',
     border: 'none',
     color: '#1db954',
-    padding: '10px 8px', // Larger touch area
+    padding: '6px 8px',
     cursor: 'pointer',
-    fontSize: '16px', // Larger font for mobile
+    fontSize: '14px',
     userSelect: 'none',
     borderRadius: '4px',
   },
@@ -448,14 +442,14 @@ const styles = {
   songListContainer: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-    gap: '16px',
+    gap: '24px',
     justifyContent: 'center',
-    paddingBottom: '40px',
+    paddingBottom: '100px',
   },
 
   card: {
     background: '#1e1e1e',
-    padding: '12px',
+    padding: '16px',
     borderRadius: '12px',
     textAlign: 'center',
     boxShadow: '0 6px 14px rgba(0,0,0,0.5)',
@@ -473,7 +467,7 @@ const styles = {
     width: '100%',
     height: '180px',
     objectFit: 'cover',
-    borderRadius: '8px',
+    borderRadius: '12px',
   },
 
   visualizer: {
@@ -513,7 +507,7 @@ const styles = {
     color: 'white',
     fontSize: '20px',
     cursor: 'pointer',
-    padding: '8px', // Larger touch area
+    padding: '0',
     outline: 'none',
     userSelect: 'none',
   },
@@ -530,7 +524,6 @@ const styles = {
     fontSize: '24px',
     cursor: 'pointer',
     color: '#f00',
-    padding: '8px', // Larger touch area
   },
 
   dlBtn: {
@@ -539,7 +532,6 @@ const styles = {
     fontSize: '20px',
     cursor: 'pointer',
     color: '#1db954',
-    padding: '8px', // Larger touch area
   },
 
   loadingText: {
@@ -560,7 +552,7 @@ const styles = {
     backgroundColor: 'transparent',
     border: '1.5px solid #1db954',
     borderRadius: '6px',
-    padding: '8px 12px', // Larger for mobile
+    padding: '6px 12px',
     cursor: 'pointer',
     color: '#1db954',
     userSelect: 'none',
