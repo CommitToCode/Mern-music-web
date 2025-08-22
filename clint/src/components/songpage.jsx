@@ -265,7 +265,7 @@ export default function SongsPage() {
             <div key={song._id} style={styles.card}>
               <div style={styles.imageWrapper}>
                 <img
-                  src={`https://mern-music-web.onrender.com${song.imageUrl || '/images/default-cover.png'}`}
+                  src={`http://localhost:3005${song.imageUrl || '/images/default-cover.png'}`}
                   alt={song.title}
                   style={styles.img}
                 />
