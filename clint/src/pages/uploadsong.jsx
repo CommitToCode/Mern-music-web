@@ -178,24 +178,22 @@ export default function Upload() {
         background: 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)',
         minHeight: '100vh',
         color: '#f0f0f0',
-        padding: 'clamp(1rem, 5vw, 2rem)',
+        padding: '2rem',
         fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-        boxSizing: 'border-box',
       }}
     >
-      <div style={{ maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
-        <h2 style={{ fontSize: 'clamp(1.5rem, 5vw, 2rem)', fontWeight: 700, marginBottom: 'clamp(1rem, 3vw, 1.25rem)', textAlign: 'center' }}>🎙️ Upload Your Song</h2>
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <h2 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: 20 }}>🎙️ Upload Your Song</h2>
 
         {message && (
           <div
             style={{
               backgroundColor: '#2c3e50',
-              padding: 'clamp(0.75rem, 2vw, 0.875rem) clamp(1rem, 2.5vw, 1.125rem)',
-              borderRadius: '8px',
-              marginBottom: 'clamp(0.75rem, 2vw, 1rem)',
+              padding: '12px 18px',
+              borderRadius: 8,
+              marginBottom: '1rem',
               color: '#f6ffed',
               border: '1px solid #4caf50',
-              fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
             }}
           >
             {message}
@@ -209,12 +207,11 @@ export default function Upload() {
               backgroundColor: '#ff9800',
               color: '#fff',
               border: 'none',
-              padding: 'clamp(0.5rem, 1.5vw, 0.625rem) clamp(0.75rem, 2vw, 1rem)',
-              borderRadius: '6px',
+              padding: '10px 16px',
+              borderRadius: 6,
               cursor: 'pointer',
               fontWeight: 600,
-              marginBottom: 'clamp(0.75rem, 2vw, 1rem)',
-              fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
+              marginBottom: '1rem',
             }}
           >
             Go to Subscription
@@ -226,11 +223,9 @@ export default function Upload() {
           style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: 'clamp(0.75rem, 2vw, 1rem)',
-            marginBottom: 'clamp(1.5rem, 4vw, 2rem)',
-            maxWidth: '400px',
-            width: '100%',
-            margin: '0 auto',
+            gap: '1rem',
+            marginBottom: '2rem',
+            maxWidth: 400,
           }}
         >
           <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your Name" required style={inputStyle} />
@@ -240,14 +235,13 @@ export default function Upload() {
           <button
             type="submit"
             style={{
-              padding: 'clamp(0.75rem, 2vw, 0.875rem)',
+              padding: '12px',
               backgroundColor: '#1db954',
               color: '#fff',
               border: 'none',
-              borderRadius: '6px',
+              borderRadius: 6,
               cursor: 'pointer',
               fontWeight: 600,
-              fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
             }}
             disabled={!isLoggedIn || !isSubscribed}
           >
@@ -255,17 +249,16 @@ export default function Upload() {
           </button>
         </form>
 
-        <h3 style={{ marginTop: 'clamp(2rem, 5vw, 2.5rem)', fontSize: 'clamp(1.25rem, 4vw, 1.5rem)', fontWeight: 600, color: '#9effd3', textAlign: 'center' }}>
+        <h3 style={{ marginTop: 40, fontSize: '1.5rem', fontWeight: 600, color: '#9effd3' }}>
           Your voice tells a story—let others hear it.
         </h3>
 
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(clamp(250px, 30vw, 300px), 1fr))',
-            gap: 'clamp(1rem, 3vw, 1.5rem)',
-            marginTop: 'clamp(1rem, 3vw, 1.25rem)',
-            justifyContent: 'center',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+            gap: '1.5rem',
+            marginTop: 20,
           }}
         >
           {approvedSongs.map((song) => (
@@ -273,15 +266,13 @@ export default function Upload() {
               key={song._id}
               style={{
                 background: '#1e1e1e',
-                padding: 'clamp(0.75rem, 2vw, 1rem)',
-                borderRadius: '12px',
+                padding: 16,
+                borderRadius: 12,
                 boxShadow: '0 6px 14px rgba(0,0,0,0.5)',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 color: '#f0f0f0',
-                width: '100%',
-                boxSizing: 'border-box',
               }}
             >
               <img
@@ -292,36 +283,36 @@ export default function Upload() {
                 }}
                 style={{
                   width: '100%',
-                  height: 'clamp(120px, 25vw, 150px)',
+                  height: 150,
                   objectFit: 'cover',
-                  borderRadius: '10px',
+                  borderRadius: 10,
                 }}
               />
-              <h4 style={{ marginTop: 'clamp(0.5rem, 1.5vw, 0.625rem)', fontSize: 'clamp(1rem, 3vw, 1.125rem)' }}>{song.name}</h4>
-              <p style={{ color: '#ccc', fontSize: 'clamp(0.75rem, 2.5vw, 0.875rem)', textAlign: 'center' }}>{song.line}</p>
+              <h4 style={{ marginTop: 10 }}>{song.name}</h4>
+              <p style={{ color: '#ccc', fontSize: 14 }}>{song.line}</p>
               <audio
                 controls
-                controlsList="nodownload"
+                 controlsList="nodownload"
                 style={{
                   width: '100%',
                   outline: 'none',
                   filter: 'invert(1) brightness(1.2)',
-                  marginTop: 'clamp(0.5rem, 1.5vw, 0.625rem)',
                 }}
               >
                 <source src={getFileUrl(song.audio)} type="audio/mpeg" />
                 Your browser does not support the audio element.
               </audio>
+             
             </div>
           ))}
         </div>
 
         {isLoggedIn && downloads.length > 0 && (
-          <div style={{ marginTop: 'clamp(2rem, 5vw, 3rem)', padding: '0 clamp(0.5rem, 2vw, 1rem)' }}>
-            <h3 style={{ marginBottom: 'clamp(0.75rem, 2vw, 1rem)', color: '#9effd3', fontSize: 'clamp(1.125rem, 3.5vw, 1.375rem)', textAlign: 'center' }}>📥 Your Downloads ({userEmail})</h3>
+          <div style={{ marginTop: '3rem' }}>
+            <h3 style={{ marginBottom: '1rem', color: '#9effd3' }}>📥 Your Downloads ({userEmail})</h3>
             <ul style={{ listStyle: 'none', paddingLeft: 0 }}>
               {downloads.map((dl, i) => (
-                <li key={i} style={{ marginBottom: 'clamp(0.5rem, 1.5vw, 0.625rem)', color: '#ddd', fontSize: 'clamp(0.75rem, 2.5vw, 0.875rem)' }}>
+                <li key={i} style={{ marginBottom: '8px', color: '#ddd' }}>
                   {dl.songName} – {new Date(dl.downloadedAt).toLocaleString()}
                 </li>
               ))}
@@ -346,12 +337,9 @@ export default function Upload() {
 }
 
 const inputStyle = {
-  padding: 'clamp(0.5rem, 1.5vw, 0.625rem) clamp(0.75rem, 2vw, 0.875rem)',
-  borderRadius: '6px',
+  padding: '10px 12px',
+  borderRadius: 6,
   border: '1px solid #555',
   backgroundColor: '#1e1e1e',
   color: '#fff',
-  fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
-  boxSizing: 'border-box',
-  width: '100%',
 };
