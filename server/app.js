@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
-const cors = require('cors');
 const path = require('path');
 const dbcon = require('./app/config/dbcon');
 const adminRoutes = require('./app/routes/admin');
@@ -21,20 +20,24 @@ const allowedOrigins = [
   "https://mern-music-web.vercel.app"
 ];
 
-// CORS middleware
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true); // allow non-browser requests
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      } else {
-        return callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-  })
-);
+// Custom CORS middleware for dynamic origin + preflight
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    res.header(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+    );
+  }
+  if (req.method === "OPTIONS") return res.sendStatus(200); // handle preflight
+  next();
+});
 
 // JSON & URL-encoded middleware
 app.use(express.json());
@@ -98,7 +101,7 @@ app.post('/api/logout', (req, res) => {
   });
 });
 
-// Error handler
+// Global error handler
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).json({ error: err.message || 'Internal Server Error' });
