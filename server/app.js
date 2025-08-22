@@ -1,58 +1,76 @@
 const express = require('express');
 const app = express();
 const session = require('express-session');
-const MongoStore = require('connect-mongo'); // added
+const MongoStore = require('connect-mongo');
 const cors = require('cors');
 const path = require('path');
 const dbcon = require('./app/config/dbcon');
 const adminRoutes = require('./app/routes/admin');
 const authRoutes = require('./app/routes/authroutes');
 const songRoutes = require('./app/routes/songroutes');
-const User = require('./app/models/user');
 const musicRoutes = require('./app/routes/musicroutes');
+const User = require('./app/models/user');
 require('dotenv').config();
 
 // Connect to MongoDB
 dbcon();
 
-// Session setup using MongoDB store
+// Allowed frontend origins
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://mern-music-web.vercel.app"
+];
+
+// CORS middleware
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true); // allow non-browser requests
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
+// JSON & URL-encoded middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Static folders
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Session setup
 app.use(
   session({
     secret: 'myverysecurekey123@!',
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.mongodb_url }), // changed
+    store: MongoStore.create({ mongoUrl: process.env.mongodb_url }),
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
       httpOnly: true,
-      sameSite: 'lax',
-      secure: false
+      sameSite: 'none', // allow cross-site cookies
+      secure: true // must be true for HTTPS
     },
   })
 );
 
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "https://mern-music-fyhx4ilrz-committocodes-projects.vercel.app"
-    ],
-    credentials: true,
-  })
-);
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
+// View engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// Routes
 app.use('/admin', adminRoutes);
 app.use(authRoutes);
 app.use('/songs', songRoutes);
+app.use('/', musicRoutes);
 
+// API: Get logged-in user
 app.get('/api/me', async (req, res) => {
   console.log('Session:', req.session);
   if (!req.session?.user) {
@@ -68,24 +86,26 @@ app.get('/api/me', async (req, res) => {
   res.json({ user: req.session.user });
 });
 
+// API: Logout
 app.post('/api/logout', (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       console.error('Logout error:', err);
       return res.status(500).json({ error: 'Logout failed' });
     }
-    res.clearCookie('connect.sid');
+    res.clearCookie('connect.sid', { path: '/', sameSite: 'none', secure: true });
     res.json({ message: 'Logged out successfully' });
   });
 });
 
+// Error handler
 app.use((err, req, res, next) => {
   console.error(err);
-  res.status(500).json({ error: 'Internal Server Error' });
+  res.status(500).json({ error: err.message || 'Internal Server Error' });
 });
 
-app.use('/', musicRoutes);
-
-app.listen(3005, () => {
-  console.log('✅ Server running at http://localhost:3005');
+// Start server
+const PORT = process.env.PORT || 3005;
+app.listen(PORT, () => {
+  console.log(`✅ Server running at http://localhost:${PORT}`);
 });
