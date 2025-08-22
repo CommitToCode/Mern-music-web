@@ -48,7 +48,7 @@ export default function Favorites() {
           const playing = useAudioPlaying(audioRef);
 
           
-          const imgUrl = `https://mern-music-web.onrender.com${song.imageUrl || '/images/default-cover.png'}`;
+          const imgUrl = `http://localhost:3005${song.imageUrl || '/images/default-cover.png'}`;
 
           return (
             <div key={song._id} style={cardStyle}>

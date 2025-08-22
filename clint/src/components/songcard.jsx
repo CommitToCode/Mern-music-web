@@ -12,7 +12,7 @@ export default function SongCard({ song }) {
   return (
     <div style={cardStyle}>
       <img
-        src={`https://mern-music-web.onrender.com${song.imageUrl || ''}`}
+        src={`http://localhost:3005${song.imageUrl || ''}`}
         alt={song.title}
         style={imgStyle}
         onError={(e) => e.currentTarget.src = '/images/default-cover.png'}

@@ -14,7 +14,7 @@ export default function UserProfilePage() {
   const getFileUrl = (filePath) => {
     if (!filePath) return '';
     const cleanedPath = filePath.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
-    return `https://mern-music-web.onrender.com/uploads/${cleanedPath}`;
+    return `http://localhost:3005/uploads/${cleanedPath}`;
   };
 
   useEffect(() => {
