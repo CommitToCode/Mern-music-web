@@ -18,16 +18,17 @@ dbcon();
 const allowedOrigins = [
   "http://localhost:5173",
   "https://mern-music-web.vercel.app",
-  "https://www.mern-music-web.vercel.app" // include if needed
+  "https://www.mern-music-web.vercel.app"
 ];
 
-// CORS middleware with dynamic origin + preflight
+// CORS middleware (handles undefined origins)
 app.use((req, res, next) => {
   const origin = req.headers.origin;
-  console.log("Request Origin:", origin);
 
-  if (allowedOrigins.includes(origin)) {
-    res.header("Access-Control-Allow-Origin", origin);
+  if (!origin || allowedOrigins.includes(origin)) {
+    if (origin) {
+      res.header("Access-Control-Allow-Origin", origin);
+    }
     res.header("Access-Control-Allow-Credentials", "true");
     res.header(
       "Access-Control-Allow-Headers",
@@ -38,12 +39,11 @@ app.use((req, res, next) => {
       "GET, POST, PUT, PATCH, DELETE, OPTIONS"
     );
   } else {
-    console.warn("CORS blocked origin:", origin);
+    console.log("CORS blocked origin:", origin);
+    return res.status(403).json({ error: "Not allowed by CORS" });
   }
 
-  // Preflight
-  if (req.method === "OPTIONS") return res.sendStatus(200);
-
+  if (req.method === "OPTIONS") return res.sendStatus(200); // preflight
   next();
 });
 
@@ -56,20 +56,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Session setup
-app.use(
-  session({
-    secret: 'myverysecurekey123@!',
-    resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.mongodb_url }),
-    cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-      httpOnly: true,
-      sameSite: 'none', // cross-site
-      secure: true      // HTTPS required
-    },
-  })
-);
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'supersecretkey123',
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({ mongoUrl: process.env.mongodb_url }),
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    httpOnly: true,
+    sameSite: 'none', // cross-site cookies
+    secure: true      // HTTPS required
+  }
+}));
 
 // View engine
 app.set('view engine', 'ejs');
@@ -84,9 +82,7 @@ app.use('/', musicRoutes);
 // API: Get logged-in user
 app.get('/api/me', async (req, res) => {
   console.log('Session:', req.session);
-  if (!req.session?.user) {
-    return res.status(401).json({ error: 'Not authenticated' });
-  }
+  if (!req.session?.user) return res.status(401).json({ error: 'Not authenticated' });
 
   const dbUser = await User.findById(req.session.user._id);
   if (!dbUser) return res.status(404).json({ error: 'User not found' });
@@ -99,11 +95,9 @@ app.get('/api/me', async (req, res) => {
 
 // API: Logout
 app.post('/api/logout', (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.error('Logout error:', err);
-      return res.status(500).json({ error: 'Logout failed' });
-    }
+  req.session.destroy(err => {
+    if (err) return res.status(500).json({ error: 'Logout failed' });
+
     res.clearCookie('connect.sid', { path: '/', sameSite: 'none', secure: true });
     res.json({ message: 'Logged out successfully' });
   });
