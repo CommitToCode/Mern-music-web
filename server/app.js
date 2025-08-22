@@ -17,12 +17,15 @@ dbcon();
 // Allowed frontend origins
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://mern-music-web.vercel.app"
+  "https://mern-music-web.vercel.app",
+  "https://www.mern-music-web.vercel.app" // include if needed
 ];
 
-// Custom CORS middleware for dynamic origin + preflight
+// CORS middleware with dynamic origin + preflight
 app.use((req, res, next) => {
   const origin = req.headers.origin;
+  console.log("Request Origin:", origin);
+
   if (allowedOrigins.includes(origin)) {
     res.header("Access-Control-Allow-Origin", origin);
     res.header("Access-Control-Allow-Credentials", "true");
@@ -34,8 +37,13 @@ app.use((req, res, next) => {
       "Access-Control-Allow-Methods",
       "GET, POST, PUT, PATCH, DELETE, OPTIONS"
     );
+  } else {
+    console.warn("CORS blocked origin:", origin);
   }
-  if (req.method === "OPTIONS") return res.sendStatus(200); // handle preflight
+
+  // Preflight
+  if (req.method === "OPTIONS") return res.sendStatus(200);
+
   next();
 });
 
@@ -57,8 +65,8 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
       httpOnly: true,
-      sameSite: 'none', // allow cross-site cookies
-      secure: true // must be true for HTTPS
+      sameSite: 'none', // cross-site
+      secure: true      // HTTPS required
     },
   })
 );
@@ -110,5 +118,5 @@ app.use((err, req, res, next) => {
 // Start server
 const PORT = process.env.PORT || 3005;
 app.listen(PORT, () => {
-  console.log(`✅ Server running at http://localhost:${PORT}`);
+  console.log(`✅ Server running at port ${PORT}`);
 });
