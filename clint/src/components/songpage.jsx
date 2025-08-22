@@ -347,18 +347,20 @@ export default function SongsPage() {
           0%, 100% { transform: scaleY(0.3); }
           50% { transform: scaleY(1.2); }
         }
+        
+        @media (max-width: 768px) {
+          .responsive-hide {
+            display: none;
+          }
+        }
       `}</style>
     </div>
   );
 }
 
-// Keep styles as-is — no changes required.
-
-  
-
 const styles = {
   container: {
-    padding: 24,
+    padding: '24px 16px',
     background: 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)',
     minHeight: '100vh',
     color: '#f0f0f0',
@@ -367,24 +369,27 @@ const styles = {
   },
 
   searchBarWrapper: {
-    position: 'absolute',
-    top: 24,
-    left: 24,
-    right: 24,
+    position: 'relative',
     display: 'flex',
     alignItems: 'center',
-    gap: 8,
+    gap: '8px',
+    marginBottom: '80px',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
   },
 
   searchInput: {
     padding: '8px 12px',
-    borderRadius: 8,
+    borderRadius: '8px',
     border: '1px solid #444',
-    fontSize: 14,
+    fontSize: '14px',
     backgroundColor: '#111',
     color: '#eee',
-    width: 220,
+    minWidth: '220px',
+    flex: '1',
+    maxWidth: '400px',
     outline: 'none',
+    marginRight: '8px',
   },
 
   dropdownWrapper: {
@@ -395,25 +400,24 @@ const styles = {
     background: 'transparent',
     border: 'none',
     color: '#eee',
-    fontSize: 24,
+    fontSize: '24px',
     cursor: 'pointer',
     userSelect: 'none',
     padding: '0 6px',
     outline: 'none',
     lineHeight: 1,
-      marginLeft: 1050,  // <-- added margin here
   },
 
   dropdownMenu: {
     position: 'absolute',
     top: 'calc(100% + 4px)',
-    right: 0,
+    right: '0',
     backgroundColor: '#222',
-    borderRadius: 8,
+    borderRadius: '8px',
     boxShadow: '0 2px 8px rgba(0,0,0,0.8)',
-    padding: 8,
-    minWidth: 160,
-    zIndex: 1000,
+    padding: '8px',
+    minWidth: '160px',
+    zIndex: '1000',
   },
 
   dropdownItem: {
@@ -424,64 +428,65 @@ const styles = {
     color: '#1db954',
     padding: '6px 8px',
     cursor: 'pointer',
-    fontSize: 14,
+    fontSize: '14px',
     userSelect: 'none',
-    borderRadius: 4,
+    borderRadius: '4px',
   },
 
   dropdownArtistSection: {
-    marginTop: 8,
+    marginTop: '8px',
     borderTop: '1px solid #444',
-    paddingTop: 8,
+    paddingTop: '8px',
   },
 
   songListContainer: {
-    display: 'flex',
-    flexWrap: 'wrap',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+    gap: '24px',
     justifyContent: 'center',
-    gap: 24,
-    marginTop: 80,
-    paddingBottom: 100,
+    paddingBottom: '100px',
   },
 
   card: {
     background: '#1e1e1e',
-    padding: 16,
-    borderRadius: 12,
-    width: 280,
+    padding: '16px',
+    borderRadius: '12px',
     textAlign: 'center',
     boxShadow: '0 6px 14px rgba(0,0,0,0.5)',
     position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
   },
 
   imageWrapper: {
     position: 'relative',
+    width: '100%',
   },
 
   img: {
     width: '100%',
-    height: 180,
+    height: '180px',
     objectFit: 'cover',
-    borderRadius: 12,
+    borderRadius: '12px',
   },
 
   visualizer: {
     position: 'absolute',
-    bottom: 10,
+    bottom: '10px',
     left: '50%',
     transform: 'translateX(-50%)',
     display: 'flex',
-    gap: 4,
-    height: 30,
-    zIndex: 10,
+    gap: '4px',
+    height: '30px',
+    zIndex: '10',
     pointerEvents: 'none',
   },
 
- visualizerBar: {
-    width: 5,
+  visualizerBar: {
+    width: '5px',
     height: '100%',
     backgroundColor: '#1db954',
-    borderRadius: 2,
+    borderRadius: '2px',
     animationName: 'upDown',
     animationDuration: '1s',
     animationIterationCount: 'infinite',
@@ -492,17 +497,17 @@ const styles = {
   seekControls: {
     display: 'flex',
     justifyContent: 'space-around',
-    marginTop: 8,
-    marginBottom: 8,
+    marginTop: '8px',
+    marginBottom: '8px',
   },
 
   seekButton: {
     background: 'transparent',
     border: 'none',
     color: 'white',
-    fontSize: 20,
+    fontSize: '20px',
     cursor: 'pointer',
-    padding: 0,
+    padding: '0',
     outline: 'none',
     userSelect: 'none',
   },
@@ -510,13 +515,13 @@ const styles = {
   buttonRow: {
     display: 'flex',
     justifyContent: 'space-between',
-    marginTop: 10,
+    marginTop: '10px',
   },
 
   favBtn: {
     background: 'transparent',
     border: 'none',
-    fontSize: 24,
+    fontSize: '24px',
     cursor: 'pointer',
     color: '#f00',
   },
@@ -524,29 +529,29 @@ const styles = {
   dlBtn: {
     background: 'transparent',
     border: 'none',
-    fontSize: 20,
+    fontSize: '20px',
     cursor: 'pointer',
     color: '#1db954',
   },
 
   loadingText: {
     textAlign: 'center',
-    marginTop: 20,
+    marginTop: '20px',
     color: '#ccc',
   },
 
   pagination: {
     display: 'flex',
     justifyContent: 'center',
-    marginTop: 24,
-    gap: 8,
+    marginTop: '24px',
+    gap: '8px',
     flexWrap: 'wrap',
   },
 
   pageBtn: {
     backgroundColor: 'transparent',
     border: '1.5px solid #1db954',
-    borderRadius: 6,
+    borderRadius: '6px',
     padding: '6px 12px',
     cursor: 'pointer',
     color: '#1db954',
@@ -555,35 +560,38 @@ const styles = {
 
   welcomeBox: {
     backgroundColor: '#111',
-    borderRadius: 12,
-    padding: 12,
-    marginBottom: 56,
+    borderRadius: '12px',
+    padding: '12px',
+    marginBottom: '20px',
     position: 'relative',
-    maxWidth: 280,
+    maxWidth: '100%',
   },
 
   welcomeRow: {
     display: 'flex',
     alignItems: 'center',
-    gap: 6,
-    fontSize: 18,
-    marginBottom: 8,
+    gap: '6px',
+    fontSize: '18px',
+    marginBottom: '8px',
     color: '#1db954',
+    flexWrap: 'wrap',
   },
 
   expiredRow: {
     display: 'flex',
     alignItems: 'center',
-    gap: 6,
-    fontSize: 14,
+    gap: '6px',
+    fontSize: '14px',
     color: '#e33',
+    flexWrap: 'wrap',
   },
 
   activeRow: {
     display: 'flex',
     alignItems: 'center',
-    gap: 6,
-    fontSize: 14,
+    gap: '6px',
+    fontSize: '14px',
     color: '#1db954',
+    flexWrap: 'wrap',
   },
 };
