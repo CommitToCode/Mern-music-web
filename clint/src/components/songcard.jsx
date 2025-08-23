@@ -12,7 +12,8 @@ export default function SongCard({ song }) {
   return (
     <div style={cardStyle}>
       <img
-        src={`https://mern-music-web.onrender.com${song.imageUrl || ''}`}
+        src={`https://res.cloudinary.com/da39aeyvi/image/upload/v1755934334/${song.imageUrl || "1752730434639_ma50fb.jpg"}`} 
+
         alt={song.title}
         style={imgStyle}
         onError={(e) => e.currentTarget.src = '/images/default-cover.png'}
@@ -25,11 +26,11 @@ export default function SongCard({ song }) {
         <>
           <audio
             controls
-            src={`https://mern-music-web.onrender.com${song.fileUrl}`}
+            src={`https://res.cloudinary.com/da39aeyvi/video/upload/v1755934336/${song.fileUrl}`}
             style={audioStyle}
           />
           {isLoggedIn ? (
-            <ProtectedDownload url={`https://mern-music-web.onrender.com${song.fileUrl}`} />
+            <ProtectedDownload url={`https://res.cloudinary.com/da39aeyvi/video/upload/v1755934336/${song.fileUrl}`} />
           ) : (
             <p style={{ color: 'red', fontSize: '14px', margin: '8px 0' }}>Login to Download</p>
           )}

@@ -265,7 +265,7 @@ export default function SongsPage() {
             <div key={song._id} style={styles.card}>
               <div style={styles.imageWrapper}>
                 <img
-                  src={`https://mern-music-web.onrender.com${song.imageUrl || '/images/default-cover.png'}`}
+                  src={`https://res.cloudinary.com/da39aeyvi/image/upload/v1755934334/${song.imageUrl || '/images/default-cover.png'}`}
                   alt={song.title}
                   style={styles.img}
                 />
@@ -296,7 +296,7 @@ export default function SongsPage() {
                     onPause={() => setPlayingSongId(null)}
                     onEnded={() => setPlayingSongId(null)}
                   >
-                    <source src={`https://mern-music-web.onrender.com${song.fileUrl}`} type="audio/mpeg" />
+                    <source src={`https://res.cloudinary.com/da39aeyvi/video/upload/v1755934336/${song.fileUrl}`} type="audio/mpeg" />
                   </audio>
                   {isPlaying && (
                     <div style={styles.seekControls}>
