@@ -12,7 +12,7 @@ export default function SongCard({ song }) {
   return (
     <div style={cardStyle}>
       <img
-        src={`http://localhost:3005${song.imageUrl || ''}`}
+        src={`https://mern-music-web.onrender.com${song.imageUrl || ''}`}
         alt={song.title}
         style={imgStyle}
         onError={(e) => e.currentTarget.src = '/images/default-cover.png'}
@@ -25,11 +25,11 @@ export default function SongCard({ song }) {
         <>
           <audio
             controls
-            src={`http://localhost:3005${song.fileUrl}`}
+            src={`https://mern-music-web.onrender.com${song.fileUrl}`}
             style={audioStyle}
           />
           {isLoggedIn ? (
-            <ProtectedDownload url={`http://localhost:3005${song.fileUrl}`} />
+            <ProtectedDownload url={`https://mern-music-web.onrender.com${song.fileUrl}`} />
           ) : (
             <p style={{ color: 'red', fontSize: '14px', margin: '8px 0' }}>Login to Download</p>
           )}

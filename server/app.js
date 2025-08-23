@@ -50,7 +50,7 @@ app.use((req, res, next) => {
     return res.status(403).json({ error: "Not allowed by CORS" });
   }
 
-  if (req.method === "OPTIONS") return res.sendStatus(200); // preflight
+  if (req.method === "OPTIONS") return res.sendStatus(200); 
   next();
 });
 
