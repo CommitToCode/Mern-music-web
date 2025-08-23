@@ -32,7 +32,7 @@ export default function SongsPage() {
     async (pageToLoad, search, isNewQuery = false) => {
       setLoading(true);
       try {
-        const url = `https://mern-music-web.onrender.com/admin/api/songs?search=${encodeURIComponent(search)}&page=${pageToLoad}&limit=${PAGE_SIZE}`;
+        const url = `http://localhost:3005/admin/api/songs?search=${encodeURIComponent(search)}&page=${pageToLoad}&limit=${PAGE_SIZE}`;
         const res = await fetch(url, { credentials: 'include' });
 
         if (!res.ok) throw new Error('Failed to fetch songs');
@@ -122,7 +122,7 @@ export default function SongsPage() {
   const uniqueArtists = Array.from(new Set(songs.map((song) => song.artist))).filter(Boolean);
 
   const startDownload = (song) => {
-    window.open(`https://mern-music-web.onrender.com/songs/api/songs/${song._id}/download`, '_blank');
+    window.open(`http://localhost:3005/songs/api/songs/${song._id}/download`, '_blank');
   };
 
   const handleDownload = async (song) => {
@@ -132,7 +132,7 @@ export default function SongsPage() {
     }
 
     try {
-      const res = await fetch(`https://mern-music-web.onrender.com/songs/api/songs/${song._id}/status`, {
+      const res = await fetch(`http://localhost:3005/songs/api/songs/${song._id}/status`, {
         credentials: 'include',
       });
 
@@ -265,7 +265,7 @@ export default function SongsPage() {
             <div key={song._id} style={styles.card}>
               <div style={styles.imageWrapper}>
                 <img
-                  src={`https://res.cloudinary.com/da39aeyvi/image/upload/v1755934334/${song.imageUrl || '/images/default-cover.png'}`}
+                  src={`http://localhost:3005${song.imageUrl || '/images/default-cover.png'}`}
                   alt={song.title}
                   style={styles.img}
                 />
@@ -296,7 +296,7 @@ export default function SongsPage() {
                     onPause={() => setPlayingSongId(null)}
                     onEnded={() => setPlayingSongId(null)}
                   >
-                    <source src={`https://res.cloudinary.com/da39aeyvi/video/upload/v1755934334/${song.fileUrl}`} type="audio/mpeg" />
+                    <source src={`http://localhost:3005${song.fileUrl}`} type="audio/mpeg" />
                   </audio>
                   {isPlaying && (
                     <div style={styles.seekControls}>
