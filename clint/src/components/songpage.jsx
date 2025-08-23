@@ -7,8 +7,6 @@ import { useAuth } from '../context/authcontext';
 import { useFavorites } from '../context/favouritecontext';
 
 const PAGE_SIZE = 8;
-const CLOUDINARY_IMAGE_BASE = 'https://res.cloudinary.com/da39aeyvi/image/upload';
-const CLOUDINARY_AUDIO_BASE = 'https://res.cloudinary.com/da39aeyvi/video/upload';
 
 export default function SongsPage() {
   const [songs, setSongs] = useState([]);
@@ -40,19 +38,8 @@ export default function SongsPage() {
         if (!res.ok) throw new Error('Failed to fetch songs');
         const data = await res.json();
 
-        // Map imageUrl and fileUrl to Cloudinary
-        const mappedSongs = data.songs.map((song) => ({
-          ...song,
-          imageUrl: song.imageUrl
-            ? `${CLOUDINARY_IMAGE_BASE}/${song.imageUrl.split('/').pop()}`
-            : `${CLOUDINARY_IMAGE_BASE}/default-cover.png`,
-          fileUrl: song.fileUrl
-            ? `${CLOUDINARY_AUDIO_BASE}/${song.fileUrl.split('/').pop()}`
-            : null,
-        }));
-
         setTotalPages(Math.ceil(data.totalCount / PAGE_SIZE));
-        setSongs((prev) => (isNewQuery ? mappedSongs : [...prev, ...mappedSongs]));
+        setSongs((prev) => (isNewQuery ? data.songs : [...prev, ...data.songs]));
       } catch (err) {
         toast.error('Error loading songs: ' + err.message);
       } finally {
@@ -135,7 +122,7 @@ export default function SongsPage() {
   const uniqueArtists = Array.from(new Set(songs.map((song) => song.artist))).filter(Boolean);
 
   const startDownload = (song) => {
-    window.open(`${CLOUDINARY_AUDIO_BASE}/${song.fileUrl.split('/').pop()}`, '_blank');
+    window.open(`http://localhost:3005/songs/api/songs/${song._id}/download`, '_blank');
   };
 
   const handleDownload = async (song) => {
@@ -278,7 +265,7 @@ export default function SongsPage() {
             <div key={song._id} style={styles.card}>
               <div style={styles.imageWrapper}>
                 <img
-                  src={song.imageUrl}
+                  src={`http://localhost:3005${song.imageUrl || '/images/default-cover.png'}`}
                   alt={song.title}
                   style={styles.img}
                 />
@@ -309,7 +296,7 @@ export default function SongsPage() {
                     onPause={() => setPlayingSongId(null)}
                     onEnded={() => setPlayingSongId(null)}
                   >
-                    <source src={song.fileUrl} type="audio/mpeg" />
+                    <source src={`http://localhost:3005${song.fileUrl}`} type="audio/mpeg" />
                   </audio>
                   {isPlaying && (
                     <div style={styles.seekControls}>
@@ -380,6 +367,7 @@ const styles = {
     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
     position: 'relative',
   },
+
   searchBarWrapper: {
     position: 'relative',
     display: 'flex',
@@ -389,6 +377,7 @@ const styles = {
     justifyContent: 'space-between',
     flexWrap: 'wrap',
   },
+
   searchInput: {
     padding: '8px 12px',
     borderRadius: '8px',
@@ -402,9 +391,11 @@ const styles = {
     outline: 'none',
     marginRight: '8px',
   },
+
   dropdownWrapper: {
     position: 'relative',
   },
+
   threeDotBtn: {
     background: 'transparent',
     border: 'none',
@@ -416,6 +407,7 @@ const styles = {
     outline: 'none',
     lineHeight: 1,
   },
+
   dropdownMenu: {
     position: 'absolute',
     top: 'calc(100% + 4px)',
@@ -427,6 +419,7 @@ const styles = {
     minWidth: '160px',
     zIndex: '1000',
   },
+
   dropdownItem: {
     width: '100%',
     textAlign: 'left',
@@ -439,11 +432,13 @@ const styles = {
     userSelect: 'none',
     borderRadius: '4px',
   },
+
   dropdownArtistSection: {
     marginTop: '8px',
     borderTop: '1px solid #444',
     paddingTop: '8px',
   },
+
   songListContainer: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
@@ -451,6 +446,7 @@ const styles = {
     justifyContent: 'center',
     paddingBottom: '100px',
   },
+
   card: {
     background: '#1e1e1e',
     padding: '16px',
@@ -461,16 +457,19 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
   },
+
   imageWrapper: {
     position: 'relative',
     width: '100%',
   },
+
   img: {
     width: '100%',
     height: '180px',
     objectFit: 'cover',
     borderRadius: '12px',
   },
+
   visualizer: {
     position: 'absolute',
     bottom: '10px',
@@ -482,6 +481,7 @@ const styles = {
     zIndex: '10',
     pointerEvents: 'none',
   },
+
   visualizerBar: {
     width: '5px',
     height: '100%',
@@ -493,12 +493,14 @@ const styles = {
     animationTimingFunction: 'ease-in-out',
     transformOrigin: 'bottom',
   },
+
   seekControls: {
     display: 'flex',
     justifyContent: 'space-around',
     marginTop: '8px',
     marginBottom: '8px',
   },
+
   seekButton: {
     background: 'transparent',
     border: 'none',
@@ -509,11 +511,13 @@ const styles = {
     outline: 'none',
     userSelect: 'none',
   },
+
   buttonRow: {
     display: 'flex',
     justifyContent: 'space-between',
     marginTop: '10px',
   },
+
   favBtn: {
     background: 'transparent',
     border: 'none',
@@ -521,6 +525,7 @@ const styles = {
     cursor: 'pointer',
     color: '#f00',
   },
+
   dlBtn: {
     background: 'transparent',
     border: 'none',
@@ -528,6 +533,31 @@ const styles = {
     cursor: 'pointer',
     color: '#1db954',
   },
+
+  loadingText: {
+    textAlign: 'center',
+    marginTop: '20px',
+    color: '#ccc',
+  },
+
+  pagination: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: '24px',
+    gap: '8px',
+    flexWrap: 'wrap',
+  },
+
+  pageBtn: {
+    backgroundColor: 'transparent',
+    border: '1.5px solid #1db954',
+    borderRadius: '6px',
+    padding: '6px 12px',
+    cursor: 'pointer',
+    color: '#1db954',
+    userSelect: 'none',
+  },
+
   welcomeBox: {
     backgroundColor: '#111',
     borderRadius: '12px',
@@ -536,6 +566,7 @@ const styles = {
     position: 'relative',
     maxWidth: '100%',
   },
+
   welcomeRow: {
     display: 'flex',
     alignItems: 'center',
@@ -545,7 +576,6 @@ const styles = {
     color: '#1db954',
     flexWrap: 'wrap',
   },
-  
 
   expiredRow: {
     display: 'flex',
