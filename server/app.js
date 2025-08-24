@@ -63,7 +63,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
-
+const isProduction = process.env.VERCEL === '1'; // Vercel automatically sets this env variable
 app.use(session({
   secret: process.env.SESSION_SECRET || 'supersecretkey123',
   resave: false,
