@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
 
   const refreshAuth = async () => {
     try {
-      const res = await fetch('http://localhost:3005/api/me', { credentials: 'include' });
+      const res = await fetch('https://mern-music-web.onrender.com/api/me', { credentials: 'include' });
       if (res.ok) {
         const { user } = await res.json();
         setUser(user);
