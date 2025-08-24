@@ -32,7 +32,7 @@ export default function SongsPage() {
     async (pageToLoad, search, isNewQuery = false) => {
       setLoading(true);
       try {
-        const url = `http://localhost:3005/admin/api/songs?search=${encodeURIComponent(search)}&page=${pageToLoad}&limit=${PAGE_SIZE}`;
+        const url = `https://mern-music-web.onrender.com/admin/api/songs?search=${encodeURIComponent(search)}&page=${pageToLoad}&limit=${PAGE_SIZE}`;
         const res = await fetch(url, { credentials: 'include' });
 
         if (!res.ok) throw new Error('Failed to fetch songs');
