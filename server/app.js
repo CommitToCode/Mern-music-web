@@ -63,19 +63,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
+
 app.use(session({
   secret: process.env.SESSION_SECRET || 'supersecretkey123',
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({ mongoUrl: process.env.mongodb_url }),
   cookie: {
-    maxAge: 1000 * 60 * 60 * 24 * 7, 
+    maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
     httpOnly: true,
-    secure: false,       
-    sameSite: 'lax', 
-    maxAge: 1000 * 60 * 60 * 24 * 7,  
+    secure: isProduction,   // ✅ secure cookies only in production (Vercel)
+    sameSite: isProduction ? 'none' : 'lax' // ✅ cross-site cookie needed for Vercel
   }
 }));
+
 
 
 app.set('view engine', 'ejs');
