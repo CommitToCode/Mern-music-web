@@ -11,36 +11,50 @@ const songRoutes = require('./app/routes/songroutes');
 const musicRoutes = require('./app/routes/musicroutes');
 const User = require('./app/models/user');
 
-dbcon();
+// ---------------------------
+// 1. Database Connection
+// ---------------------------
+dbcon()
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
-// Detect production (Vercel)
+// ---------------------------
+// 2. Environment Detection
+// ---------------------------
 const isProduction = process.env.VERCEL === '1';
+const PORT = process.env.PORT || 3005;
 
-// CORS setup
+// ---------------------------
+// 3. CORS Configuration
+// ---------------------------
 const allowedOrigins = [
-  "http://localhost:5173",
-  "http://localhost:3005",
+  "http://localhost:5173",        // React dev server
+  "http://localhost:3005",        // Backend testing
   "https://mern-music-web.vercel.app",
   "https://www.mern-music-web.vercel.app"
 ];
 
 app.use(cors({
-  origin: function (origin, callback) {
+  origin: function(origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
-    return callback(new Error('Not allowed by CORS'));
+    callback(new Error('CORS not allowed'));
   },
-  credentials: true
+  credentials: true // Allow cookies
 }));
 
-// Express middlewares
+// ---------------------------
+// 4. Express Middlewares
+// ---------------------------
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Static folders
+// Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Sessions
+// ---------------------------
+// 5. Session Configuration
+// ---------------------------
 app.use(session({
   secret: process.env.SESSION_SECRET || 'supersecretkey123',
   resave: false,
@@ -49,52 +63,74 @@ app.use(session({
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
     httpOnly: true,
-    secure: isProduction,           // secure cookies on Vercel
-    sameSite: isProduction ? 'none' : 'lax' // cross-site for Vercel
+    secure: isProduction,             // secure on Vercel
+    sameSite: isProduction ? 'none' : 'lax'
   }
 }));
 
-// View engine
+// ---------------------------
+// 6. View Engine
+// ---------------------------
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Routes
-app.use('/admin', adminRoutes);
-app.use(authRoutes);
-app.use('/songs', songRoutes);
-app.use('/', musicRoutes);
+// ---------------------------
+// 7. Routes
+// ---------------------------
+app.use('/admin', adminRoutes);   // Admin routes
+app.use(authRoutes);              // Auth routes (login/register)
+app.use('/songs', songRoutes);    // Song API
+app.use('/', musicRoutes);        // Music frontend pages
 
-// Auth check endpoint
+// ---------------------------
+// 8. Auth Check Endpoint
+// ---------------------------
 app.get('/api/me', async (req, res) => {
-  if (!req.session?.user) return res.status(401).json({ error: 'Not authenticated' });
+  try {
+    if (!req.session?.user) return res.status(401).json({ error: 'Not authenticated' });
 
-  const dbUser = await User.findById(req.session.user._id);
-  if (!dbUser) return res.status(404).json({ error: 'User not found' });
+    const dbUser = await User.findById(req.session.user._id);
+    if (!dbUser) return res.status(404).json({ error: 'User not found' });
 
-  req.session.user.isSubscribed = dbUser.isSubscribed;
-  req.session.user.subscriptionExpires = dbUser.subscriptionExpires;
+    // Update session info
+    req.session.user.isSubscribed = dbUser.isSubscribed;
+    req.session.user.subscriptionExpires = dbUser.subscriptionExpires;
 
-  res.json({ user: req.session.user });
+    res.json({ user: req.session.user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
 });
 
-// Logout
+// ---------------------------
+// 9. Logout
+// ---------------------------
 app.post('/api/logout', (req, res) => {
   req.session.destroy(err => {
     if (err) return res.status(500).json({ error: 'Logout failed' });
 
-    res.clearCookie('connect.sid', { path: '/', sameSite: isProduction ? 'none' : 'lax', secure: isProduction });
+    res.clearCookie('connect.sid', {
+      path: '/',
+      sameSite: isProduction ? 'none' : 'lax',
+      secure: isProduction
+    });
+
     res.json({ message: 'Logged out successfully' });
   });
 });
 
-// Error handling
+// ---------------------------
+// 10. Error Handling
+// ---------------------------
 app.use((err, req, res, next) => {
-  console.error(err);
+  console.error('Error:', err.message);
   res.status(500).json({ error: err.message || 'Internal Server Error' });
 });
 
-// Start server
-const PORT = process.env.PORT || 3005;
+// ---------------------------
+// 11. Start Server
+// ---------------------------
 app.listen(PORT, () => {
-  console.log(`Server running at port ${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });
