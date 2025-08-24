@@ -265,7 +265,7 @@ export default function SongsPage() {
             <div key={song._id} style={styles.card}>
               <div style={styles.imageWrapper}>
                 <img
-                  src={`http://localhost:3005${song.imageUrl || '/images/default-cover.png'}`}
+                  src={`https://res.cloudinary.com/da39aeyvi/image/upload/v1755937296/${song.imageUrl || '/images/default-cover.png'}`}
                   alt={song.title}
                   style={styles.img}
                 />

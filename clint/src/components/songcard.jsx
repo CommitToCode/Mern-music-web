@@ -12,7 +12,7 @@ export default function SongCard({ song }) {
   return (
     <div style={cardStyle}>
       <img
-        src={`http://localhost:3005${song.imageUrl || ''}`}
+        src={`https://res.cloudinary.com/da39aeyvi/image/upload/v1755937296/${song.imageUrl || ''}`}
         alt={song.title}
         style={imgStyle}
         onError={(e) => e.currentTarget.src = '/images/default-cover.png'}
