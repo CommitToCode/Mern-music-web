@@ -2,6 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/authcontext';
 
+// Dynamically set backend URL
+const API_URL =
+  window.location.hostname === 'localhost'
+    ? 'http://localhost:3005'
+    : 'https://mern-music-web.vercel.app'; // your Vercel backend URL
+
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -11,22 +17,28 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await fetch('http://localhost:3005/api/login', {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const res = await fetch(`${API_URL}/api/login`, {
+        method: 'POST',
+        credentials: 'include', // important for session cookies
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
 
-    if (res.ok) {
-      await refreshAuth();
-      if (user && !user.isSubscribed) {
-        setShowSubscribeModal(true);
+      if (res.ok) {
+        await refreshAuth();
+        if (user && !user.isSubscribed) {
+          setShowSubscribeModal(true);
+        } else {
+          navigate('/');
+        }
       } else {
-        navigate('/');
+        const data = await res.json();
+        alert(data.error || 'Login failed, check your credentials or register first.');
       }
-    } else {
-      alert('Login failed, check your credentials or register first.');
+    } catch (err) {
+      console.error('Login error:', err);
+      alert('Login failed. Check console for details.');
     }
   };
 
@@ -59,7 +71,6 @@ export default function Login() {
           />
           <button type="submit" style={button}>Login</button>
 
-          
           <div style={{ textAlign: 'center', marginTop: 12 }}>
             <Link to="/forgot-password" style={forgotLink}>
               Forgot Password?
@@ -70,7 +81,6 @@ export default function Login() {
     </div>
   );
 }
-
 const pageBackground = {
   minHeight: '100vh',
   display: 'flex',
