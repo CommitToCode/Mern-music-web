@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
   // Updated logout function
   const logout = async () => {
     try {
-      const res = await fetch('http://localhost:3005/api/logout', {
+      const res = await fetch('https://mern-music-web.onrender.com/api/logout', {
         method: 'POST',
         credentials: 'include',
       });
