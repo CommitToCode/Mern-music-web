@@ -265,7 +265,8 @@ export default function SongsPage() {
             <div key={song._id} style={styles.card}>
               <div style={styles.imageWrapper}>
                 <img
-                  src={`http://localhost:3005${song.imageUrl || '/images/default-cover.png'}`}
+                            src={song.imageUrl || "/images/default-cover.png"}
+
                   alt={song.title}
                   style={styles.img}
                 />
@@ -296,7 +297,7 @@ export default function SongsPage() {
                     onPause={() => setPlayingSongId(null)}
                     onEnded={() => setPlayingSongId(null)}
                   >
-                    <source src={`http://localhost:3005${song.fileUrl}`} type="audio/mpeg" />
+                     <source src={song.fileUrl} type="audio/mp3" />
                   </audio>
                   {isPlaying && (
                     <div style={styles.seekControls}>

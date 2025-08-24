@@ -44,11 +44,12 @@ class AdminController {
   async addSong(req, res) {
     const { title, artist, language } = req.body;
 
-    const songFile = req.files && req.files['fileUrl'] ? req.files['fileUrl'][0] : null;
-    const imageFile = req.files && req.files['imageUrl'] ? req.files['imageUrl'][0] : null;
+   const songFile = req.files && req.files['fileUrl'] ? req.files['fileUrl'][0] : null;
+const imageFile = req.files && req.files['imageUrl'] ? req.files['imageUrl'][0] : null;
 
-    const fileUrl = songFile ? `/uploads/${songFile.filename}` : '';
-    const imageUrl = imageFile ? `/uploads/${imageFile.filename}` : '';
+const fileUrl = songFile ? songFile.path : '';   // ✅ Cloudinary full URL
+const imageUrl = imageFile ? imageFile.path : ''; // ✅ Cloudinary full URL
+
 
     await Song.create({ title, artist, language, fileUrl, imageUrl });
     res.redirect('/admin/songs');
