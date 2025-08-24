@@ -7,35 +7,41 @@ export default function SongCard({ song }) {
   const { addFavorite } = useFavorites();
   const { isLoggedIn } = useAuth();
 
-  if (!song) return null; 
+  if (!song) return null;
 
   return (
     <div style={cardStyle}>
+      {/* Image */}
       <img
-        src={`https://res.cloudinary.com/da39aeyvi/image/upload/v1755937296/${song.imageUrl || ''}`}
+        src={getImageUrl(song)}
         alt={song.title}
         style={imgStyle}
-        onError={(e) => e.currentTarget.src = '/images/default-cover.png'}
+        onError={(e) => (e.currentTarget.src = '/images/default-cover.png')}
       />
 
       <h4 style={titleStyle}>{song.title || 'Untitled'}</h4>
       <p style={artistStyle}>{song.artist || 'Unknown Artist'}</p>
 
+      {/* Audio + Download */}
       {song.isActive && song.fileUrl ? (
         <>
           <audio
             controls
-            src={`http://localhost:3005${song.fileUrl}`}
+            src={getAudioUrl(song)}
             style={audioStyle}
           />
           {isLoggedIn ? (
-            <ProtectedDownload url={`http://localhost:3005${song.fileUrl}`} />
+            <ProtectedDownload url={getAudioUrl(song)} />
           ) : (
-            <p style={{ color: 'red', fontSize: '14px', margin: '8px 0' }}>Login to Download</p>
+            <p style={{ color: 'red', fontSize: '14px', margin: '8px 0' }}>
+              Login to Download
+            </p>
           )}
         </>
       ) : (
-        <p style={{ color: 'gray', fontSize: '14px', margin: '8px 0' }}>Not Active</p>
+        <p style={{ color: 'gray', fontSize: '14px', margin: '8px 0' }}>
+          Not Active
+        </p>
       )}
 
       <button onClick={() => addFavorite(song)} style={favBtnStyle}>
@@ -45,6 +51,41 @@ export default function SongCard({ song }) {
   );
 }
 
+/* ---------- Helpers ---------- */
+const getImageUrl = (song) => {
+  if (!song?.imageUrl) return '/images/default-cover.png';
+
+  // Local multer image
+  if (
+    song.imageUrl.startsWith('uploads/') ||
+    song.imageUrl.endsWith('.jpg') ||
+    song.imageUrl.endsWith('.jpeg') ||
+    song.imageUrl.endsWith('.png')
+  ) {
+    return `http://localhost:3005/${song.imageUrl}`;
+  }
+
+  // Cloudinary image (DB only has filename)
+  return `https://res.cloudinary.com/da39aeyvi/image/upload/v1755937296/${song.imageUrl}`;
+};
+
+const getAudioUrl = (song) => {
+  if (!song?.fileUrl) return '';
+
+  // Local multer audio
+  if (
+    song.fileUrl.startsWith('/uploads/') ||
+    song.fileUrl.endsWith('.mp3') ||
+    song.fileUrl.endsWith('.wav')
+  ) {
+    return `http://localhost:3005${song.fileUrl}`;
+  }
+
+  // Cloudinary audio (DB only has filename)
+  return `https://res.cloudinary.com/da39aeyvi/video/upload/v1755937296/${song.fileUrl}`;
+};
+
+/* ---------- Styles ---------- */
 const cardStyle = {
   border: '1px solid #ccc',
   padding: '12px',
@@ -83,9 +124,9 @@ const artistStyle = {
   whiteSpace: 'nowrap',
 };
 
-const audioStyle = { 
+const audioStyle = {
   width: '100%',
-  margin: '8px 0'
+  margin: '8px 0',
 };
 
 const favBtnStyle = {

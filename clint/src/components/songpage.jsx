@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SubscriptionModal from '../pages/subscribe';
@@ -7,6 +8,41 @@ import { useAuth } from '../context/authcontext';
 import { useFavorites } from '../context/favouritecontext';
 
 const PAGE_SIZE = 8;
+
+/* ------------------ Helpers ------------------ */
+const getImageUrl = (song) => {
+  if (!song?.imageUrl) return '/images/default-cover.png';
+
+  // Local multer
+  if (
+    song.imageUrl.startsWith('uploads/') ||
+    song.imageUrl.endsWith('.jpg') ||
+    song.imageUrl.endsWith('.jpeg') ||
+    song.imageUrl.endsWith('.png')
+  ) {
+    return `http://localhost:3005/${song.imageUrl}`;
+  }
+
+  // Cloudinary
+  return `https://res.cloudinary.com/da39aeyvi/image/upload/v1755937296/${song.imageUrl}`;
+};
+
+const getAudioUrl = (song) => {
+  if (!song?.fileUrl) return '';
+
+  // Local multer
+  if (
+    song.fileUrl.startsWith('/uploads/') ||
+    song.fileUrl.endsWith('.mp3') ||
+    song.fileUrl.endsWith('.wav')
+  ) {
+    return `http://localhost:3005${song.fileUrl}`;
+  }
+
+  // Cloudinary
+  return `https://res.cloudinary.com/da39aeyvi/video/upload/v1755937296/${song.fileUrl}`;
+};
+/* --------------------------------------------- */
 
 export default function SongsPage() {
   const [songs, setSongs] = useState([]);
@@ -265,9 +301,10 @@ export default function SongsPage() {
             <div key={song._id} style={styles.card}>
               <div style={styles.imageWrapper}>
                 <img
-                  src={`https://res.cloudinary.com/da39aeyvi/image/upload/v1755937296/${song.imageUrl || '/images/default-cover.png'}`}
+                  src={getImageUrl(song)}
                   alt={song.title}
                   style={styles.img}
+                  onError={(e) => (e.currentTarget.src = '/images/default-cover.png')}
                 />
                 {song.fileUrl && isPlaying && (
                   <div style={styles.visualizer}>
@@ -296,7 +333,7 @@ export default function SongsPage() {
                     onPause={() => setPlayingSongId(null)}
                     onEnded={() => setPlayingSongId(null)}
                   >
-                    <source src={`http://localhost:3005${song.fileUrl}`} type="audio/mpeg" />
+                    <source src={getAudioUrl(song)} type="audio/mpeg" />
                   </audio>
                   {isPlaying && (
                     <div style={styles.seekControls}>
@@ -358,6 +395,7 @@ export default function SongsPage() {
   );
 }
 
+/* ------------------ Styles ------------------ */
 const styles = {
   container: {
     padding: '24px 16px',
@@ -367,7 +405,6 @@ const styles = {
     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
     position: 'relative',
   },
-
   searchBarWrapper: {
     position: 'relative',
     display: 'flex',
@@ -377,7 +414,6 @@ const styles = {
     justifyContent: 'space-between',
     flexWrap: 'wrap',
   },
-
   searchInput: {
     padding: '8px 12px',
     borderRadius: '8px',
@@ -391,11 +427,7 @@ const styles = {
     outline: 'none',
     marginRight: '8px',
   },
-
-  dropdownWrapper: {
-    position: 'relative',
-  },
-
+  dropdownWrapper: { position: 'relative' },
   threeDotBtn: {
     background: 'transparent',
     border: 'none',
@@ -407,7 +439,6 @@ const styles = {
     outline: 'none',
     lineHeight: 1,
   },
-
   dropdownMenu: {
     position: 'absolute',
     top: 'calc(100% + 4px)',
@@ -419,7 +450,6 @@ const styles = {
     minWidth: '160px',
     zIndex: '1000',
   },
-
   dropdownItem: {
     width: '100%',
     textAlign: 'left',
@@ -432,13 +462,11 @@ const styles = {
     userSelect: 'none',
     borderRadius: '4px',
   },
-
   dropdownArtistSection: {
     marginTop: '8px',
     borderTop: '1px solid #444',
     paddingTop: '8px',
   },
-
   songListContainer: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
@@ -446,7 +474,6 @@ const styles = {
     justifyContent: 'center',
     paddingBottom: '100px',
   },
-
   card: {
     background: '#1e1e1e',
     padding: '16px',
@@ -457,19 +484,13 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
   },
-
-  imageWrapper: {
-    position: 'relative',
-    width: '100%',
-  },
-
+  imageWrapper: { position: 'relative', width: '100%' },
   img: {
     width: '100%',
     height: '180px',
     objectFit: 'cover',
     borderRadius: '12px',
   },
-
   visualizer: {
     position: 'absolute',
     bottom: '10px',
@@ -481,7 +502,6 @@ const styles = {
     zIndex: '10',
     pointerEvents: 'none',
   },
-
   visualizerBar: {
     width: '5px',
     height: '100%',
@@ -493,14 +513,12 @@ const styles = {
     animationTimingFunction: 'ease-in-out',
     transformOrigin: 'bottom',
   },
-
   seekControls: {
     display: 'flex',
     justifyContent: 'space-around',
     marginTop: '8px',
     marginBottom: '8px',
   },
-
   seekButton: {
     background: 'transparent',
     border: 'none',
@@ -511,7 +529,6 @@ const styles = {
     outline: 'none',
     userSelect: 'none',
   },
-
   buttonRow: {
     display: 'flex',
     justifyContent: 'space-between',
