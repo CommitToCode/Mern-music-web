@@ -48,7 +48,7 @@ export default function Favorites() {
           const playing = useAudioPlaying(audioRef);
 
           
-          const imgUrl = `http://localhost:3005${song.imageUrl || '/images/default-cover.png'}`;
+const imgUrl = song.imageUrl || '/images/default-cover.png';
 
           return (
             <div key={song._id} style={cardStyle}>
@@ -79,7 +79,7 @@ export default function Favorites() {
                   controlsList="nodownload"
                   style={audioStyle}
                   ref={audioRef}
-                  src={`http://localhost:3005${song.fileUrl}`}
+                  src={song.fileUrl}
                   type="audio/mpeg"
                 />
               )}

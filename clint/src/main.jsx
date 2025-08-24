@@ -4,16 +4,6 @@ import './index.css';
 import App from './App.jsx';
 
 
-const BASE_URL = "https://mern-music-web.onrender.com"; 
-
-
-const originalFetch = window.fetch;
-window.fetch = (url, options) => {
-  if (typeof url === "string" && url.startsWith("http://localhost:3005")) {
-    url = url.replace("http://localhost:3005", BASE_URL);
-  }
-  return originalFetch(url, options);
-};
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

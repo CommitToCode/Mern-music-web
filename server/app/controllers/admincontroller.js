@@ -47,8 +47,8 @@ class AdminController {
    const songFile = req.files && req.files['fileUrl'] ? req.files['fileUrl'][0] : null;
 const imageFile = req.files && req.files['imageUrl'] ? req.files['imageUrl'][0] : null;
 
-const fileUrl = songFile ? songFile.path : '';   // ✅ Cloudinary full URL
-const imageUrl = imageFile ? imageFile.path : ''; // ✅ Cloudinary full URL
+const fileUrl = songFile ? songFile.path : '';   
+const imageUrl = imageFile ? imageFile.path : ''; 
 
 
     await Song.create({ title, artist, language, fileUrl, imageUrl });

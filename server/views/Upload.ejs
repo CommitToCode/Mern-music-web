@@ -31,17 +31,16 @@
           <td style="padding: 12px; color: #333;"><%= song.name %></td>
           <td style="padding: 12px;">
             <img 
-              src="/uploads/<%= getCleanPath(song.image) %>" 
-              alt="User Image" 
-              width="80" height="80" 
-              style="border-radius: 6px; object-fit: cover; border: 1px solid #ddd;"
-              onerror="this.onerror=null; this.src='/placeholder.jpg';" 
-            />
+             src="<%= song.image %>" alt="Image for <%= song.name %>" style="width: 100px; height: 100px; object-fit: cover;" />
+
+             
+          
           </td>
           <td style="padding: 12px; color: #555;"><%= song.line %></td>
           <td style="padding: 12px;">
             <audio controls style="width: 150px;">
-              <source src="/uploads/<%= getCleanPath(song.audio) %>" type="audio/mpeg" />
+                <source src="<%= song.audio %>" type="audio/mpeg" />
+
               Your browser does not support the audio element.
             </audio>
           </td>

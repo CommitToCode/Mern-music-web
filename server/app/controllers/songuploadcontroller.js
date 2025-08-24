@@ -12,8 +12,12 @@ async function getApprovedSongs(req, res) {
 async function uploadSong(req, res) {
   try {
     const { name, line } = req.body;
-    const image = req.files?.image?.[0]?.filename;  
-    const audio = req.files?.audio?.[0]?.filename;
+     const imageFile = req.files?.image?.[0];
+    const songFile = req.files?.audio?.[0];
+
+    
+    const image = imageFile ? imageFile.path : '';
+    const audio = songFile ? songFile.path : '';
 
     if (!name || !line || !image || !audio) {
       return res.status(400).json({ error: 'Missing fields' });

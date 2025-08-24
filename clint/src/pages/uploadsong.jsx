@@ -15,11 +15,7 @@ export default function Upload() {
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
 
-  const getFileUrl = (filePath) => {
-    if (!filePath) return '';
-    const cleanedPath = filePath.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
-    return `http://localhost:3005/uploads/${cleanedPath}`;
-  };
+  
 
   const checkLoginStatus = async () => {
     try {
@@ -276,7 +272,7 @@ export default function Upload() {
               }}
             >
               <img
-                src={getFileUrl(song.image)}
+                src={song.image}
                 alt={song.name}
                 onError={(e) => {
                   e.target.src = '/placeholder.jpg';
@@ -299,7 +295,7 @@ export default function Upload() {
                   filter: 'invert(1) brightness(1.2)',
                 }}
               >
-                <source src={getFileUrl(song.audio)} type="audio/mpeg" />
+                <source src={song.audio} type="audio/mpeg" />
                 Your browser does not support the audio element.
               </audio>
              
