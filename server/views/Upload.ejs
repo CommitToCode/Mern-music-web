@@ -20,22 +20,23 @@
       </tr>
     </thead>
     <tbody>
-     
+      
       <% songs.forEach(song => { %>
         <tr style="border-bottom: 1px solid #eee;">
           <td style="padding: 12px; color: #333;"><%= song.name %></td>
           <td style="padding: 12px;">
             <img 
-             src="<%= song.image %>" alt="Image for <%= song.name %>" style="width: 100px; height: 100px; object-fit: cover;" />
-
-             
-          
+              src="<%= song.image %>" 
+              alt="User Image" 
+              width="80" height="80" 
+              style="border-radius: 6px; object-fit: cover; border: 1px solid #ddd;"
+              onerror="this.onerror=null; this.src='/placeholder.jpg';" 
+            />
           </td>
           <td style="padding: 12px; color: #555;"><%= song.line %></td>
           <td style="padding: 12px;">
             <audio controls style="width: 150px;">
-                <source src="<%= song.audio %>" type="audio/mpeg" />
-
+              <source src="<%= song.audio %>" type="audio/mpeg" />
               Your browser does not support the audio element.
             </audio>
           </td>
@@ -71,13 +72,13 @@
 
   <script>
     async function approve(id) {
-      const res = await fetch(`/dashboard/music/approve/${id}`, { method: 'Put' });
+      const res = await fetch(`/dashboard/music/approve/${id}`, { method: 'PUT' });
       if (res.ok) location.reload();
       else alert('Failed to approve');
     }
 
     async function remove(id) {
-      const res = await fetch(`/dashboard/music/delete/${id}`, { method: 'Delete' });
+      const res = await fetch(`/dashboard/music/delete/${id}`, { method: 'DELETE' });
       if (res.ok) location.reload();
       else alert('Failed to delete');
     }
