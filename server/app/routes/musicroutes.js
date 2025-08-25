@@ -27,21 +27,9 @@ router.get('/dashboard/music', async (req, res) => {
 
 router.put('/dashboard/music/approve/:id', async (req, res) => {
   try {
-    const { id } = req.params;
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ error: 'Invalid song ID' });
-    }
-
-    const song = await Song.findByIdAndUpdate(id, { status: 'approved' }, { new: true });
-
-    if (!song) {
-      return res.status(404).json({ error: 'Song not found' });
-    }
-
-    res.json({ success: true, song });
+    await Song.findByIdAndUpdate(req.params.id, { status: 'approved' });
+    res.json({ success: true });
   } catch (err) {
-    console.error('Approval Error:', err);
     res.status(500).json({ error: 'Failed to approve song' });
   }
 });
