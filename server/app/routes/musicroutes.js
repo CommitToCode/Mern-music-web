@@ -10,7 +10,7 @@ const { getApprovedSongs } = require('../controllers/songuploadcontroller');
 router.get('/dashboard/music', async (req, res) => {
   try {
     const songs = await Song.find().sort({ createdAt: -1 });
-    res.render('Upload', { songs });  
+    res.render('Upload', { tracks: songs })  
   } catch (error) {
     console.error('Error fetching songs:', error);
     res.status(500).send('Server error');
@@ -68,7 +68,8 @@ router.get('/songs/approved-songs', getApprovedSongs);
 
 router.get('/tracks', ensureAuth, async (req, res) => {
   try {
-    const tracks = await Track.find({ uploadedBy: req.user._id, status: 'approved' }).sort({ createdAt: -1 });
+    const tracks = await Song.find({ uploadedBy: req.user._id, status: 'approved' }).sort({ createdAt: -1 });
+
     res.json({ tracks });
   } catch (err) {
     console.error('Error fetching user tracks:', err);

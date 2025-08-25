@@ -10,6 +10,8 @@ const authRoutes = require("./app/routes/authroutes");
 const songRoutes = require("./app/routes/songroutes");
 const musicRoutes = require("./app/routes/musicroutes");
 const User = require("./app/models/user");
+const methodOverride = require('method-override');
+app.use(methodOverride('_method'));
 
 // ---------------------------
 // 1. Database Connection
