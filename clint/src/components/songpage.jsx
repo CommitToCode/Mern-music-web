@@ -122,7 +122,7 @@ export default function SongsPage() {
   const uniqueArtists = Array.from(new Set(songs.map((song) => song.artist))).filter(Boolean);
 
   const startDownload = (song) => {
-    window.open(`http://localhost:3005/songs/api/songs/${song._id}/download`, '_blank');
+    window.open(`https://mern-music-web.onrender.com/songs/api/songs/${song._id}/download`, '_blank');
   };
 
   const handleDownload = async (song) => {
@@ -132,7 +132,7 @@ export default function SongsPage() {
     }
 
     try {
-      const res = await fetch(`http://localhost:3005/songs/api/songs/${song._id}/status`, {
+      const res = await fetch(`https://mern-music-web.onrender.com/songs/api/songs/${song._id}/status`, {
         credentials: 'include',
       });
 

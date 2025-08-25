@@ -10,7 +10,7 @@ export default function LogoutButton() {
   const handleLogout = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:3005/api/logout', {
+      const res = await fetch('https://mern-music-web.onrender.com/api/logout', {
         method: 'POST',
         credentials: 'include',
       });

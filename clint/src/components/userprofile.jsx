@@ -14,7 +14,7 @@ export default function UserProfilePage() {
   const getFileUrl = (filePath) => {
     if (!filePath) return '';
     const cleanedPath = filePath.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
-    return `http://localhost:3005/uploads/${cleanedPath}`;
+    return `https://mern-music-web.onrender.com/uploads/${cleanedPath}`;
   };
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export default function UserProfilePage() {
 
     const fetchDownloads = async () => {
       try {
-        const res = await fetch('http://localhost:3005/songs/api/songs/downloads', {
+        const res = await fetch('https://mern-music-web.onrender.com/songs/api/songs/downloads', {
           credentials: 'include',
         });
         if (!res.ok) throw new Error('Failed to fetch downloads');
@@ -37,7 +37,7 @@ export default function UserProfilePage() {
 
     const fetchUserUploads = async () => {
       try {
-        const res = await fetch('http://localhost:3005/user/tracks', {
+        const res = await fetch('https://mern-music-web.onrender.com/user/tracks', {
           credentials: 'include',
         });
         if (!res.ok) throw new Error('Failed to fetch user uploads');

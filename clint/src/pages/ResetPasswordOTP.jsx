@@ -14,7 +14,7 @@ export default function ResetPasswordOTP() {
     setMsg('');
     setError('');
 
-    const res = await fetch('http://localhost:3005/api/reset-password-otp', {
+    const res = await fetch('https://mern-music-web.onrender.com/api/reset-password-otp', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },

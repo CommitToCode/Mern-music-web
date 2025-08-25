@@ -8,7 +8,7 @@ export default function SubscriptionModal({ selectedSong, onClose, onSubscribe }
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:3005/api/subscribe', {
+      const response = await fetch('https://mern-music-web.onrender.com/api/subscribe', {
         method: 'POST',
         credentials: 'include',
       });

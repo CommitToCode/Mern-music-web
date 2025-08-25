@@ -19,7 +19,7 @@ export default function Upload() {
 
   const checkLoginStatus = async () => {
     try {
-      const res = await fetch('http://localhost:3005/api/me', {
+      const res = await fetch('https://mern-music-web.onrender.com/api/me', {
         method: 'GET',
         credentials: 'include',
       });
@@ -55,7 +55,7 @@ export default function Upload() {
 
   const fetchApprovedSongs = async () => {
     try {
-      const res = await fetch('http://localhost:3005/songs/approved-songs');
+      const res = await fetch('https://mern-music-web.onrender.com/songs/approved-songs');
       if (res.ok) {
         const data = await res.json();
         setApprovedSongs(data);
@@ -67,7 +67,7 @@ export default function Upload() {
 
   const fetchDownloads = async () => {
     try {
-      const res = await fetch('http://localhost:3005/api/downloads', {
+      const res = await fetch('https://mern-music-web.onrender.com/api/downloads', {
         method: 'GET',
         credentials: 'include',
       });
@@ -87,7 +87,7 @@ export default function Upload() {
     }
 
     try {
-      const res = await fetch(`http://localhost:3005/api/songs/${songId}/download`, {
+      const res = await fetch(`https://mern-music-web.onrender.com/api/songs/${songId}/download`, {
         method: 'POST',
         credentials: 'include',
       });
@@ -144,7 +144,7 @@ export default function Upload() {
       formData.append('image', image);
       formData.append('audio', audio);
 
-      const uploadRes = await fetch('http://localhost:3005/uploads', {
+      const uploadRes = await fetch('https://mern-music-web.onrender.com/uploads', {
         method: 'POST',
         body: formData,
         credentials: 'include',

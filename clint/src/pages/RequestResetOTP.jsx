@@ -12,7 +12,7 @@ export default function RequestResetOTP() {
     setError('');
     setMsg('');
 
-    const res = await fetch('http://localhost:3005/api/request-reset-otp', {
+    const res = await fetch('https://mern-music-web.onrender.com/api/request-reset-otp', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
