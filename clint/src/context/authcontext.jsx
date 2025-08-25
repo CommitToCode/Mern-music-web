@@ -33,26 +33,20 @@ export const AuthProvider = ({ children }) => {
 
   const subscribe = () => setUser((u) => ({ ...u, isSubscribed: true }));
 
-const refreshAuth = async () => {
-  try {
-    const res = await fetch('https://mern-music-web.onrender.com/api/me', {
-      credentials: 'include',
-    });
-    if (res.ok) {
-      const { user } = await res.json();
-      setUser(user);
-      return user; // ✅ return user for immediate use
-    } else {
+  const refreshAuth = async () => {
+    try {
+      const res = await fetch('https://mern-music-web.onrender.com/api/me', { credentials: 'include' });
+      if (res.ok) {
+        const { user } = await res.json();
+        setUser(user);
+      } else {
+        setUser(null);
+      }
+    } catch (err) {
+      console.error('Auth refresh error:', err);
       setUser(null);
-      return null;
     }
-  } catch (err) {
-    console.error('Auth refresh error:', err);
-    setUser(null);
-    return null;
-  }
-};
-
+  };
 
   useEffect(() => {
     refreshAuth();
