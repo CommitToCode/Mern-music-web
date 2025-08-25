@@ -6,7 +6,7 @@ const subscriptionCheck = require('../middleware/subscriptioncheck');
 const { uploadSong } = require('../controllers/songuploadcontroller'); 
 const upload = require('../middleware/upload')
 const { getApprovedSongs } = require('../controllers/songuploadcontroller');
-const song = require('../models/song');
+
 
 router.get('/dashboard/music', async (req, res) => {
   try {
