@@ -27,7 +27,7 @@
         <td><%= track.approved ? '✅' : '❌' %></td>
         <td>
           <% if (!track.approved) { %>
-             <form method="POST" action="/admin/<%= track._id %>/approve" style="display:inline">
+             <form method="Put" action="/admin/<%= track._id %>/approve" style="display:inline">
               <button>Approve</button>
             </form>
 
