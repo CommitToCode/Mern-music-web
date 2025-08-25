@@ -35,7 +35,8 @@ const allowedOrigins = [
   "http://localhost:5173",        // React dev server
   "http://localhost:3005",        // Backend testing
   "https://mern-music-web.vercel.app",
-  "https://www.mern-music-web.vercel.app"
+  "https://www.mern-music-web.vercel.app",
+    "https://mern-music-web.onrender.com" 
 ];
 
 app.use(cors({
