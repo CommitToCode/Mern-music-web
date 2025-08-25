@@ -13,24 +13,26 @@
   <h2 style="text-align: center;">Track Moderation</h2>
   <table>
     <tr>
-      <th>Name</th>
-      <th>Line</th>
-      <th>Status</th>
+      <th>Title</th>
+      <th>Artist</th>
+      <th>Uploader</th>
+      <th>Approved</th>
       <th>Actions</th>
     </tr>
-    <% songs.forEach(song => { %>
+    <% tracks.forEach(track => { %>
       <tr>
-        <td><%= song.name %></td>
-        <td><%= song.line %></td>
-        <td><%= song.status %></td>
+        <td><%= track.title %></td>
+        <td><%= track.artist %></td>
+        <td><%= track.uploader?.email || 'Unknown' %></td>
+        <td><%= track.approved ? '✅' : '❌' %></td>
         <td>
-          <% if (song.status !== 'approved') { %>
-            <form method="POST" action="/dashboard/music/approve/<%= song._id %>" style="display:inline">
-              <button type="submit">Approve</button>
+          <% if (!track.approved) { %>
+            <form method="POST" action="/admin/<%= track._id %>/approve" style="display:inline">
+              <button>Approve</button>
             </form>
           <% } %>
-          <form method="POST" action="/dashboard/music/delete/<%= song._id %>" style="display:inline">
-            <button type="submit">Delete</button>
+          <form method="POST" action="/admin/<%= track._id %>/delete" style="display:inline">
+            <button>Delete</button>
           </form>
         </td>
       </tr>
