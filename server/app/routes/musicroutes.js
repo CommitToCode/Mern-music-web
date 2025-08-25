@@ -6,6 +6,7 @@ const subscriptionCheck = require('../middleware/subscriptioncheck');
 const { uploadSong } = require('../controllers/songuploadcontroller'); 
 const upload = require('../middleware/upload')
 const { getApprovedSongs } = require('../controllers/songuploadcontroller');
+const song = require('../models/song');
 
 router.get('/dashboard/music', async (req, res) => {
   try {
@@ -25,7 +26,7 @@ router.get('/dashboard/music', async (req, res) => {
 
 
 
-router.post('/dashboard/music/approve/:id', async (req, res) => {
+router.put('/dashboard/music/approve/:id', async (req, res) => {
   try {
     await Track.findByIdAndUpdate(req.params.id, { status: 'approved' });
     res.json({ success: true });
@@ -68,7 +69,7 @@ router.get('/songs/approved-songs', getApprovedSongs);
 
 router.get('/tracks', ensureAuth, async (req, res) => {
   try {
-    const tracks = await Track.find({ uploadedBy: req.user._id, status: 'approved' }).sort({ createdAt: -1 });
+    const tracks = await song.find({ uploadedBy: req.user._id, status: 'approved' }).sort({ createdAt: -1 });
     res.json({ tracks });
   } catch (err) {
     console.error('Error fetching user tracks:', err);
