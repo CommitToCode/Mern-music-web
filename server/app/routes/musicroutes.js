@@ -27,7 +27,7 @@ router.get('/dashboard/music', async (req, res) => {
 
 router.put('/dashboard/music/approve/:id', async (req, res) => {
   try {
-    await Song.findByIdAndUpdate(req.params.id, { status: 'approved' });
+    await Track.findByIdAndUpdate(req.params.id, { status: 'approved' });
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: 'Failed to approve song' });
