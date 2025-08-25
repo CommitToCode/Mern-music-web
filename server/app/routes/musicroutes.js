@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Song = require('../models/songupload');
+const song = require('../models/songupload');
 const { ensureAuth } = require('../middleware/authsong');       
 const subscriptionCheck = require('../middleware/subscriptioncheck');  
 const { uploadSong } = require('../controllers/songuploadcontroller'); 
