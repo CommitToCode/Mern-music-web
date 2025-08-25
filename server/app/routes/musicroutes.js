@@ -7,7 +7,6 @@ const { uploadSong } = require('../controllers/songuploadcontroller');
 const upload = require('../middleware/upload')
 const { getApprovedSongs } = require('../controllers/songuploadcontroller');
 
-
 router.get('/dashboard/music', async (req, res) => {
   try {
     const songs = await Song.find().sort({ createdAt: -1 });
@@ -26,7 +25,7 @@ router.get('/dashboard/music', async (req, res) => {
 
 
 
-router.post('/dashboard/music/approve/:id', async (req, res) => {
+router.put('/dashboard/music/approve/:id', async (req, res) => {
   try {
     await Song.findByIdAndUpdate(req.params.id, { status: 'approved' });
     res.json({ success: true });
