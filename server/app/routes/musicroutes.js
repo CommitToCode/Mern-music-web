@@ -1,51 +1,64 @@
 const express = require('express');
 const router = express.Router();
-const Song = require('../models/songupload');
+const Track = require('../models/track');   // ✅ use Track model
 const { ensureAuth } = require('../middleware/authsong');       
 const subscriptionCheck = require('../middleware/subscriptioncheck');  
 const { uploadSong } = require('../controllers/songuploadcontroller'); 
-const upload = require('../middleware/upload')
+const upload = require('../middleware/upload');
 const { getApprovedSongs } = require('../controllers/songuploadcontroller');
 
+
+// Admin panel - view all tracks
 router.get('/dashboard/music', async (req, res) => {
   try {
-    const songs = await Song.find().sort({ createdAt: -1 });
-    res.render('Upload', { songs });  
+    const tracks = await Track.find().sort({ createdAt: -1 });
+    res.render('Upload', { tracks });  
   } catch (error) {
-    console.error('Error fetching songs:', error);
+    console.error('Error fetching tracks:', error);
     res.status(500).send('Server error');
   }
 });
 
 
-// Express route example
-
-
-
-
-
-
+// Approve track
 router.put('/dashboard/music/approve/:id', async (req, res) => {
   try {
-    await Song.findByIdAndUpdate(req.params.id, { status: 'approved' });
-    res.json({ success: true });
+    const updated = await Track.findByIdAndUpdate(
+      req.params.id,
+      { status: 'approved' },
+      { new: true }
+    );
+
+    if (!updated) {
+      return res.status(404).json({ error: 'Track not found' });
+    }
+
+    res.json({ success: true, track: updated });
   } catch (err) {
-    res.status(500).json({ error: 'Failed to approve song' });
+    console.error('Error approving track:', err);
+    res.status(500).json({ error: 'Failed to approve track' });
   }
 });
 
 
+// Delete track
 router.delete('/dashboard/music/delete/:id', async (req, res) => {
   try {
-    await Song.findByIdAndDelete(req.params.id);
+    const deleted = await Track.findByIdAndDelete(req.params.id);
+
+    if (!deleted) {
+      return res.status(404).json({ error: 'Track not found' });
+    }
+
     res.json({ success: true });
   } catch (err) {
-    res.status(500).json({ error: 'Failed to delete song' });
+    console.error('Error deleting track:', err);
+    res.status(500).json({ error: 'Failed to delete track' });
   }
 });
 
 
-
+// Upload track (image + audio)
 router.post(
   '/uploads',
   ensureAuth,
@@ -58,27 +71,24 @@ router.post(
 );
 
 
-
-
+// Public: get approved tracks
 router.get('/songs/approved-songs', getApprovedSongs);
 
 
-// GET /api/user/tracks
-
-
+// User’s own tracks
 router.get('/tracks', ensureAuth, async (req, res) => {
   try {
-    const tracks = await Track.find({ uploadedBy: req.user._id, status: 'approved' }).sort({ createdAt: -1 });
+    const tracks = await Track.find({
+      uploadedBy: req.user._id,
+      status: 'approved'
+    }).sort({ createdAt: -1 });
+
     res.json({ tracks });
   } catch (err) {
     console.error('Error fetching user tracks:', err);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-
-
-
 
 
 module.exports = router;
