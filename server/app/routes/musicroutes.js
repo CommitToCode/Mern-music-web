@@ -10,7 +10,7 @@ const { getApprovedSongs } = require('../controllers/songuploadcontroller');
 router.get('/dashboard/music', async (req, res) => {
   try {
     const songs = await Song.find().sort({ createdAt: -1 });
-    res.render('Upload', { tracks: songs })  
+    res.render('Upload', { songs });  
   } catch (error) {
     console.error('Error fetching songs:', error);
     res.status(500).send('Server error');
