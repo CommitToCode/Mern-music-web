@@ -27,7 +27,7 @@
         <td><%= track.approved ? '✅' : '❌' %></td>
         <td>
           <% if (!track.approved) { %>
-            <form method="POST" action="/dashboard/music/approve/<%= track._id %>?_method=PUT">
+            <form method="POST" action="/dashboard/music/approve/<%= track._id %>">
   <button type="submit">Approve</button>
 </form>
 
