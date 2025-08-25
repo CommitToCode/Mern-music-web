@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const song = require('../models/songupload');
+const Song = require('../models/songupload');
 const { ensureAuth } = require('../middleware/authsong');       
 const subscriptionCheck = require('../middleware/subscriptioncheck');  
 const { uploadSong } = require('../controllers/songuploadcontroller'); 
@@ -28,7 +28,7 @@ router.get('/dashboard/music', async (req, res) => {
 
 router.put('/dashboard/music/approve/:id', async (req, res) => {
   try {
-    await song.findByIdAndUpdate(req.params.id, { status: 'approved' });
+    await Song.findByIdAndUpdate(req.params.id, { status: 'approved' });
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: 'Failed to approve song' });
