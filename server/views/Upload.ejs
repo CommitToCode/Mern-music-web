@@ -71,13 +71,13 @@
 
   <script>
     async function approve(id) {
-      const res = await fetch(`/dashboard/music/approve/${id}`, { method: 'PUT' });
+      const res = await fetch(`/dashboard/music/approve/${id}`, { method: 'Put' });
       if (res.ok) location.reload();
       else alert('Failed to approve');
     }
 
     async function remove(id) {
-      const res = await fetch(`/dashboard/music/delete/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/dashboard/music/delete/${id}`, { method: 'Delete' });
       if (res.ok) location.reload();
       else alert('Failed to delete');
     }
