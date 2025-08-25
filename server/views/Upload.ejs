@@ -20,12 +20,7 @@
       </tr>
     </thead>
     <tbody>
-      <% 
-        function getCleanPath(path) {
-          if (!path) return '';
-          return path.replace(/^uploads[\\/]/, '').replace(/\\/g, '/');
-        }
-      %>
+     
       <% songs.forEach(song => { %>
         <tr style="border-bottom: 1px solid #eee;">
           <td style="padding: 12px; color: #333;"><%= song.name %></td>
