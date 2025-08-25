@@ -55,7 +55,7 @@ export default function Upload() {
 
   const fetchApprovedSongs = async () => {
     try {
-      const res = await fetch('https://mern-music-web.onrender.com/songs/approved-songs');
+      const res = await fetch('http://localhost:3005/songs/approved-songs');
       if (res.ok) {
         const data = await res.json();
         setApprovedSongs(data);
