@@ -102,7 +102,7 @@ router.post(
   admin.updateSong
 );
 
-// Delete, Approve, Activate/Deactivate
+
 router.post('/songs/delete/:id', admin.deleteSong);
 router.post('/songs/approve/:id', admin.approveSong);
 router.post('/songs/toggle/:id', admin.toggleActive);

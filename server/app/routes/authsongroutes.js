@@ -32,7 +32,7 @@ router.post('/api/register', async (req, res) => {
   res.json({ msg: 'registered' });
 });
 
-// Login API
+
 router.post('/api/login', async (req, res) => {
   const u = await User.findOne({ email: req.body.email });
   if (!u || !(await bcrypt.compare(req.body.password, u.passwordHash))) {

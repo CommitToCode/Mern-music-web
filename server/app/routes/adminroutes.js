@@ -29,7 +29,7 @@ router.get('/', ensureAdmin, async (req, res) => {
 
 // router.post('/users/:id/deactivate', ensureAdmin, adminController.deactivateUserSubscription);
 
-// routes/adminRoutes.js
+
 router.post('/users/:id/activate', ensureAdmin, adminController.activateUserSubscription);
 router.post('/users/:id/deactivate', ensureAdmin, adminController.deactivateUserSubscription);
 
